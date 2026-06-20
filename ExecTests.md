@@ -3,8 +3,8 @@
 
 - Compilação:
 ```
-g++ -Wall -O3 heads/UnionFind.h tests/test_unionfind.cpp -o builds/teste_union_find    
-./builds/teste_union_find
+g++ -Wall -O3 heads/UnionFind.h tests/test_unionfind.cpp -o builds/test_union_find    
+./builds/test_union_find
 ```
 
 ## Referência
@@ -16,8 +16,8 @@ g++ -Wall -O3 heads/UnionFind.h tests/test_unionfind.cpp -o builds/teste_union_f
 
 - Compilação:
 ```
-g++ -Wall -O3 tests/test_binaryheap.cpp -o builds/teste_binary_heap
-./builds/teste_binary_heap
+g++ -Wall -O3 tests/test_binaryheap.cpp -o builds/test_binary_heap
+./builds/test_binary_heap
 ```
 
 ## Referência
@@ -28,8 +28,8 @@ g++ -Wall -O3 tests/test_binaryheap.cpp -o builds/teste_binary_heap
 
 - Compilação:
 ```
-g++ -Wall -O3 tests/test_kruskal.cpp -o builds/teste_kruskal
-./builds/teste_kruskal
+g++ -Wall -O3 tests/test_kruskal.cpp -o builds/test_kruskal
+./builds/test_kruskal
 ```
 
 ## Referência
@@ -40,8 +40,8 @@ g++ -Wall -O3 tests/test_kruskal.cpp -o builds/teste_kruskal
 
 - Compilação:
 ```
-g++ -Wall -O3 tests/test_prim.cpp -o builds/teste_prim
-./builds/teste_prim
+g++ -Wall -O3 tests/test_prim.cpp -o builds/test_prim
+./builds/test_prim
 ```
 
 ## Referência
@@ -52,6 +52,14 @@ g++ -Wall -O3 tests/test_prim.cpp -o builds/teste_prim
 
 - Compilação:
 ```
-g++ -Wall -O3 tests/test_generator.cpp -o builds/teste_generator
-./builds/teste_generator
+g++ -Wall -O3 tests/test_generator.cpp -o builds/test_generator
+./builds/test_generator
+```
+
+# Timer
+
+- Compilação:
+```
+g++ -Wall -O3 tests/test_timer.cpp -o builds/test_timer
+./builds/test_timer
 ```
