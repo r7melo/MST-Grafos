@@ -20,7 +20,28 @@ struct Edge {
     }
 };
 
+// Converte a matriz de adjacencia em lista de arestas
+vector<Edge> convertMatrixToEdges(const vector<vector<uint8_t>> &graph) {
+    
+    vector<Edge> edges;
+    int V = graph.size();
 
+    for (int u = 0; u < V; u++) {
+        for (int v = u + 1; v < V; v++) {
+            // Verifica se existe aresta
+            if (graph[u][v] > 0) {
+                // Adiciona aresta a lista
+                edges.push_back({
+                    static_cast<uint16_t>(u), 
+                    static_cast<uint16_t>(v), 
+                    graph[u][v]
+                });
+            }
+        }
+    }
+    
+    return edges;
+}
 
 inline int kruskalsMST(int V, vector<Edge> &edges) {
     // Ordena as arestas

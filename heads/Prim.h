@@ -20,6 +20,17 @@ struct Vertex {
     }
 };
 
+// Função auxiliar para calcular o peso total da MST gerada
+inline int calculateWeights(const vector<int> &parent, const vector<vector<uint8_t>> &graph) {
+    int totalWeight = 0;
+    for (size_t i = 1; i < graph.size(); i++) {
+        if (parent[i] != -1) { 
+            totalWeight += graph[parent[i]][i];
+        }
+    }
+    return totalWeight;
+}
+
 inline vector<int> primMST(vector<vector<uint8_t>> &graph) {
     int V = graph.size();
     

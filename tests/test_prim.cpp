@@ -1,19 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "../heads/Prim.h" // Importa o arquivo onde está a sua função primMST
+#include "../heads/Prim.h"
 
 using namespace std;
-
-// Função auxiliar para calcular o peso total da MST gerada
-int calculateWeights(const vector<int> &parent, const vector<vector<uint8_t>> &graph) {
-    int totalWeight = 0;
-    for (size_t i = 1; i < graph.size(); i++) {
-        if (parent[i] != -1) { 
-            totalWeight += graph[parent[i]][i];
-        }
-    }
-    return totalWeight;
-}
 
 int main() {
 
@@ -29,7 +18,7 @@ int main() {
     // Execução do Prim
     vector<int> parent = primMST(graph);
 
-    cout << "Custo Total: " << calculateWeights(parent, graph);
+    cout << "Custo Total (prim): " << calculateWeights(parent, graph);
 
     return 0;
 }

@@ -46,3 +46,12 @@ g++ -Wall -O3 tests/test_prim.cpp -o builds/teste_prim
 
 ## Referência
 - [Prim’s Algorithm for Minimum Spanning Tree (MST)](https://www.geeksforgeeks.org/dsa/prims-minimum-spanning-tree-mst-greedy-algo-5/)
+
+
+# Random Graph Generator
+
+- Compilação:
+```
+g++ -Wall -O3 tests/test_generator.cpp -o builds/teste_generator
+./builds/teste_generator
+```

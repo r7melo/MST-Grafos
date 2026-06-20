@@ -10,13 +10,13 @@ int main() {
     uf.unite(2, 0);
 
     bool inSameSet = (uf.find(1) == uf.find(4));
-    cout << "The same set? " << (inSameSet ? "Yes" : "No") << endl;
+    cout << "Estao no mesmo conjunto? " << (inSameSet ? "Sim" : "Nao") << endl;
 
 
     uf.unite(0, 4);
 
     inSameSet = (uf.find(1) == uf.find(4));
-    cout << "The same set? " << (inSameSet ? "Yes" : "No") << endl;
+    cout << "Estao no mesmo conjunto? " << (inSameSet ? "Sim" : "Nao") << endl;
 
     return 0;
 }
