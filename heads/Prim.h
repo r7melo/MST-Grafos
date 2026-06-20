@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <climits>
+#include <cstdint>
 #include "BinaryHeap.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ struct Vertex {
     }
 };
 
-inline void primMST(vector<vector<int>> &graph) {
+inline vector<int> primMST(vector<vector<uint8_t>> &graph) {
     int V = graph.size();
     
     // Vetor para armazenar a Árvore Geradora Mínima (MST) construída
@@ -60,6 +61,9 @@ inline void primMST(vector<vector<int>> &graph) {
             }
         }
     }
+
+    // Retorna a MST
+    return parent;
 }
 
 #endif // PRIM_H
