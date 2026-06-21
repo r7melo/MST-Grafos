@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-    srand(time(nullptr));
+    srand(time(NULL));
 
     BinaryHeap<int> bh;
 

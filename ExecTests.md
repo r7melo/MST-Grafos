@@ -63,3 +63,13 @@ g++ -Wall -O3 tests/test_generator.cpp -o builds/test_generator
 g++ -Wall -O3 tests/test_timer.cpp -o builds/test_timer
 ./builds/test_timer
 ```
+
+# Programa Principal (Main)
+
+- Compilação:
+```
+g++ -Wall -O3 sources/main.cpp -o builds/main          
+>> ./builds/main  
+```
+
+    
