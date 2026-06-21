@@ -1,58 +1,85 @@
 # Trabalho Prático: Árvore Geradora Mínima (MST) - UFC
 
-Este projeto consiste em uma plataforma experimental de alta performance desenvolvida em C++17 para a análise comparativa de desempenho entre os algoritmos de Kruskal e Prim na resolução de Árvores Geradoras Mínimas (MST).
+Este projeto consiste em uma plataforma experimental desenvolvida em **C++17** com análise estatística em **Python (Pandas, Matplotlib, Seaborn)** para realizar a análise comparativa de desempenho entre os algoritmos de **Kruskal** e **Prim** na resolução de Árvores Geradoras Mínimas (MST).
 
-O pipeline realiza 1680 execuções individuais na memória RAM (2 tipos de grafos × 7 tamanhos de vértices × 6 níveis de densidade × 10 repetições para cada cenário), gerando métricas de tempo e peso da MST para análise estatística.
+O pipeline realiza **1.680 execuções individuais diretamente na memória RAM**:
+$$\text{Total Execuções} = 2 \text{ tipos de grafos} \times 7 \text{ tamanhos de vértices} \times 6 \text{ níveis de densidade} \times 10 \text{ repetições para cada cenário}$$
+
+O programa gera métricas de tempo de construção do grafo, tempo de execução dos algoritmos (em milissegundos) e peso total da MST para posterior consolidação estatística.
 
 ---
 
 ## 📁 Estrutura do Projeto
 
-*   `src/core/`: Estruturas fundamentais (`UnionFind`, `Aresta`) e lógica dos algoritmos de Kruskal e Prim.
-*   `src/generators/`: Geradores de grafos (Normal e Geométrico) otimizados diretamente na RAM.
-*   `src/io/`: Módulo de exportação de métricas para CSV.
-*   `src/main.cpp`: Orquestrador linear epipeline experimental.
-*   `resultados/`: Pasta que centraliza o CSV de saída e os gráficos gerados.
-*   `analise_experimento.py`: Script Python para consolidação estatística e plotagem de gráficos lado a lado.
-*   `Makefile`: Script de compilação C++.
+A organização dos diretórios no repositório é a seguinte:
+
+*   **[`heads/`](heads/)**: Módulos de cabeçalhos e lógica C++.
+    *   [`BinaryHeap.h`](heads/BinaryHeap.h): Min-Heap binário customizado utilizado pelo Prim.
+    *   [`UnionFind.h`](heads/UnionFind.h): Estrutura Disjoint-Set com compressão de caminhos para o Kruskal.
+    *   [`Kruskal.h`](heads/Kruskal.h): Implementação do algoritmo de Kruskal $O(E \log V)$.
+    *   [`Prim.h`](heads/Prim.h): Implementação do algoritmo de Prim com Min-Heap.
+    *   [`RandomGraphGenerator.h`](heads/RandomGraphGenerator.h): Gerador de grafos aleatórios Normais e Geométricos.
+    *   [`Record.h`](heads/Record.h): Estrutura para armazenamento das métricas coletadas.
+    *   [`DataExporter.h`](heads/DataExporter.h): Módulo de exportação de registros em CSV.
+    *   [`Timer.h`](heads/Timer.h): Medidor de tempo de execução baseado em `std::chrono`.
+*   **[`sources/`](sources/)**: Contém o ponto de entrada principal do pipeline [`main.cpp`](sources/main.cpp).
+*   **[`tests/`](tests/)**: Testes unitários para validação de componentes específicos do sistema.
+*   **[`resultados/`](resultados/)**: Pasta que centraliza os relatórios CSV gerados e os gráficos resultantes.
+*   **[`builds/`](builds/)**: Diretório destinado a armazenar os binários gerados na compilação.
+*   **[`analise_experimento.py`](analise_experimento.py)**: Script Python para gerar os relatórios gráficos consolidados.
 
 ---
 
-## 🛠️ Engenharia de Alta Performance e Otimizações
+## 🛠️ Engenharia de Otimizações
 
-1.  **Parada Precoce no Prim:** O laço do algoritmo de Prim é interrompido imediatamente ao atingir exatamente $V - 1$ arestas na MST, evitando o processamento desnecessário de elementos remanescentes no Heap em grafos muito densos.
-2.  **Otimização Geométrica de RAM:** As coordenadas cartesianas geométricas são geradas usando inteiros de 8 bits (`uint8_t`), economizando memória física de armazenamento temporário durante a geração. As distâncias euclidianas reais são computadas sob demanda na precisão `double`.
-3.  **Pré-Alocação de Vetores (`reserve`):** Todas as inserções nos vetores de arestas e adjacências são precedidas de alocação de capacidade física, mitigando o custo de cópia por redimensionamento em execuções de grande porte ($V = 10.000$).
-4.  **Gerenciamento Dinâmico de Escopo:** Vetores temporários de grafos são alocados no escopo interno do laço de repetições e desalocados automaticamente, prevenindo o pico de retenção de memória RAM (~2.4 GB).
-5.  **Qualidade Aleatória:** Migração completa da antiga biblioteca `rand()` para o gerador pseudo-aleatório `std::mt19937` (Mersenne Twister) da biblioteca `<random>` do C++11.
+1.  **Parada Precoce no Prim/Kruskal:** Estrutura projetada para otimizar as buscas no Heap e na estrutura Union-Find, evitando processamentos desnecessários ao atingir exatamente $V - 1$ arestas na árvore geradora.
+2.  **Otimização de RAM no Gerador Geométrico:** Geração cartesiana mantendo coordenadas de vértices em limites compactos e gerando pesos em precisão `uint8_t` para evitar sobrecarga de cache.
+3.  **Gerenciamento Dinâmico de Escopo:** Liberação explícita de estruturas internas do grafo a cada iteração para evitar vazamento ou picos de memória física durante testes com $V = 10.000$.
 
 ---
 
-## 🚀 Como Executar
+## 🚀 Como Executar o Projeto
 
-### 1. Compilação do Projeto C++
-Compile o código C++ com otimização máxima (`-O3`) executando o seguinte comando no terminal:
+### 1. Compilação do Programa Principal
+Compile o código do pipeline a partir do diretório raiz executando o comando abaixo:
 ```powershell
-g++ -Wall -Wextra -O3 -std=c++17 -I./src src/main.cpp src/core/estruturas.cpp src/core/algoritmos.cpp src/generators/gerador.cpp src/io/gerenciador_csv.cpp -o pipeline_mst
+g++ -Wall -O3 sources/main.cpp -o builds/main
 ```
 
-*Alternativa automatizada (caso possua a ferramenta `make` instalada):*
+### 2. Execução do Experimento
+Execute o pipeline para rodar a bateria de testes e coletar os tempos:
 ```powershell
-make
-```
+# No Windows:
+.\builds\main.exe
 
-### 2. Execução do Pipeline
-Rode a execução do pipeline de testes para gerar as métricas de tempo em milissegundos e peso total da árvore:
-```powershell
-.\pipeline_mst.exe
+# No Linux/macOS:
+./builds/main
 ```
-Os dados serão salvos no arquivo `resultados/resultados_pipeline.csv`.
+> [!NOTE]  
+> A execução gera um arquivo dinâmico no diretório de resultados contendo a marcação do instante de execução (ex: `resultados/records_1782025424061215000.csv`).
 
-### 3. Geração de Gráficos e Análise Visual
-Após o encerramento do pipeline, rode a análise estatística para gerar os painéis unificados com escala logarítmica:
-```powershell
-python analise_experimento.py
-```
-As seguintes imagens serão gravadas no diretório de saídas:
+### 3. Geração de Gráficos de Desempenho
+Como o script Python busca por um arquivo estático para renderizar as análises, execute os seguintes passos:
+
+1. Acesse o diretório `resultados/` e localize o CSV mais recente (`records_*.csv`).
+2. Faça uma cópia ou renomeie este arquivo para `resultados_pipeline.csv` dentro da pasta `resultados/`.
+3. Com o arquivo `resultados/resultados_pipeline.csv` no lugar, execute a análise visual com o Python:
+   ```bash
+   python analise_experimento.py
+   ```
+Os gráficos unificados comparativos serão gravados em:
 *   `resultados/grafo_normal.png`
 *   `resultados/grafo_geometrico.png`
+
+---
+
+## 🧪 Executando Testes Unitários
+
+Para validar partes individuais do projeto (como Union-Find, Binary Heap, Kruskal ou Prim), você pode compilar os arquivos presentes na pasta `tests/` e executá-los.
+
+Exemplo de compilação do teste do Union-Find:
+```powershell
+g++ -Wall -O3 tests/test_unionfind.cpp -o builds/test_union_find
+.\builds\test_union_find
+```
+Instruções completas para todos os testes unitários estão listadas no arquivo [`ExecTests.md`](ExecTests.md).

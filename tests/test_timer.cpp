@@ -13,24 +13,25 @@ void testGraph(int V, double density) {
 
     // Execucao do prim
     vector<int> parent;
+    double time;
 
     // Calcula o tempo de execução do prim
-    Timer::calculateTime([&]() {
+    Timer::calculateTime(time, [&]() {
         parent = primMST(graph);
     });
 
-    cout << "Custo Total (prim): " << calculateWeights(parent, graph) << " Tempo: " << Timer::getTime() << "ms" << endl;
+    cout << "Custo Total (prim): " << calculateWeights(parent, graph) << " Tempo: " << time << "ms" << endl;
 
     // Execucao do kruskal
     vector<Edge> edges = convertMatrixToEdges(graph);
     int weight;
 
     // Calcula o tempo de execução do kruskal
-    Timer::calculateTime([&]() {
+    Timer::calculateTime(time, [&]() {
         weight = kruskalsMST(V, edges);
     });
 
-    cout << "Custo Total (kruskal): " << weight << " Tempo: " << Timer::getTime() << "ms" << endl;
+    cout << "Custo Total (kruskal): " << weight << " Tempo: " << time << "ms" << endl;
 }
 
 void testGraphGeometric(int V, double density) {
@@ -40,24 +41,25 @@ void testGraphGeometric(int V, double density) {
 
     // Execucao do prim
     vector<int> parent;
+    double time;
 
     // Calcula o tempo de execução do prim
-    Timer::calculateTime([&]() {
+    Timer::calculateTime(time, [&]() {
         parent = primMST(graph);
     });
 
-    cout << "Custo Total (prim): " << calculateWeights(parent, graph) << " Tempo: " << Timer::getTime() << "ms" << endl;
+    cout << "Custo Total (prim): " << calculateWeights(parent, graph) << " Tempo: " << time << "ms" << endl;
 
     // Execucao do kruskal
     vector<Edge> edges = convertMatrixToEdges(graph);
     int weight;
 
     // Calcula o tempo de execução do kruskal
-    Timer::calculateTime([&]() {
+    Timer::calculateTime(time, [&]() {
         weight = kruskalsMST(V, edges);
     });
 
-    cout << "Custo Total (kruskal): " << weight << " Tempo: " << Timer::getTime() << "ms" << endl;
+    cout << "Custo Total (kruskal): " << weight << " Tempo: " << time << "ms" << endl;
 }
 
 int main() {

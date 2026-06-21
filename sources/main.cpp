@@ -2,36 +2,19 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include <chrono>
 #include "../heads/Prim.h"
 #include "../heads/Kruskal.h"
 #include "../heads/RandomGraphGenerator.h" 
 #include "../heads/Timer.h"
+#include "../heads/Record.h"
+#include "../heads/DataExporter.h"
 
 using namespace std;
 
-struct Record {
-    string nameRecord;
-    double constructionTime;
-    double executionTime;
-    int weightMST;
-
-    // Retorna um JSON
-    string toJSON() const {
-        return "{\"nameRecord\":\"" + nameRecord + 
-               "\",\"constructionTime\":\"" + to_string(constructionTime) + 
-               "\",\"executionTime\":\"" + to_string(executionTime) + 
-               "\",\"weightMST\":\"" + to_string(weightMST) + "\"}";
-    }
-};
-
-// Modificamos o nome da função real para o macro poder interceptar
-pair<Record, Record> testExecutionImpl(int V, double density, string nomeDaFuncao, function<vector<vector<uint8_t>>(int, double)> methodGenerator) {
+pair<Record, Record> testExecution(int V, double density, function<vector<vector<uint8_t>>(int, double)> methodGenerator) {
     Record recordPrim;
     Record recordKruskal;
-
-    // Vincula o nome do token
-    recordPrim.nameRecord = "Prim (" + nomeDaFuncao + ")";
-    recordKruskal.nameRecord = "Kruskal (" + nomeDaFuncao + ")";
 
     vector<vector<uint8_t>> graph;
     vector<int> parent;
@@ -64,26 +47,39 @@ pair<Record, Record> testExecutionImpl(int V, double density, string nomeDaFunca
     return {recordPrim, recordKruskal};
 }
 
-// Macro que extrai o nome da funcao executada
-#define testExecution(V, density, func) testExecutionImpl(V, density, #func, func)
-
 
 int main() {
     srand(time(NULL));
 
+    // Arquivo de registros
+    auto epoch = chrono::system_clock::now().time_since_epoch().count();
+    string fullPathResult = "resultados/records_"+to_string(epoch)+".csv"; 
+
     // Valores de teste
-    int V = 5000; 
-    double density = 0.5;
+    vector<int> vertices = {100, 500, 1000, 2500, 5000, 7500, 10000};
+    vector<double> densities = {0.0, 0.2, 0.4, 0.6, 0.8, 1.0};
 
-    cout << "[Grafico Normal]" << endl;
-    auto [primNormal, kruskalNormal] = testExecution(V, density, generateGraphMatrix);
-    cout << "Prim   : " << primNormal.toJSON() << endl;
-    cout << "Kruskal: " << kruskalNormal.toJSON() << endl;
+    // Faz os testes para todas as combinacoes
+    for (int V : vertices) {
+        for (double density : densities) {
+            for(size_t i=0; i<10; i++) {
 
-    cout << "[Grafico Geometrico]" << endl;
-    auto [primGeometric, kruskalGeometric] = testExecution(V, density, generateGraphMatrixGeometric);
-    cout << "Prim   : " << primGeometric.toJSON() << endl;
-    cout << "Kruskal: " << kruskalGeometric.toJSON() << endl;
+                cout << "====== TESTE (V:"<<V<<", density:"<<density<<", r: "<<i<<") ======" << endl;
+
+                cout << "[Grafico Normal]" << endl;
+                auto [primNormal, kruskalNormal] = testExecution(V, density, generateGraphMatrix);
+                primNormal.nameRecord = "Prim Nomal";
+                kruskalNormal.nameRecord = "Kruskal Normal";                
+                
+                cout << "[Grafico Geometrico]" << endl;
+                auto [primGeometric, kruskalGeometric] = testExecution(V, density, generateGraphMatrixGeometric);
+                primGeometric.nameRecord = "Prim Geometric";
+                kruskalGeometric.nameRecord = "Kruskal Geometric";
+                
+                DataExporter::appendToCSV(fullPathResult, {primNormal, kruskalNormal, primGeometric, kruskalGeometric});
+            }
+        }
+    }
 
 
     return 0;
