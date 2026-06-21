@@ -59,14 +59,13 @@ Execute o pipeline para rodar a bateria de testes e coletar os tempos:
 > A execução gera um arquivo dinâmico no diretório de resultados contendo a marcação do instante de execução (ex: `resultados/records_1782025424061215000.csv`).
 
 ### 3. Geração de Gráficos de Desempenho
-Como o script Python busca por um arquivo estático para renderizar as análises, execute os seguintes passos:
+Após a conclusão do pipeline C++, execute a análise visual com o Python:
+```bash
+python analise_experimento.py
+```
+> [!TIP]  
+> O script Python detecta automaticamente o arquivo de métricas mais recente (`records_*.csv`) na pasta `resultados/` e mapeia seus dados brutos de forma transparente.
 
-1. Acesse o diretório `resultados/` e localize o CSV mais recente (`records_*.csv`).
-2. Faça uma cópia ou renomeie este arquivo para `resultados_pipeline.csv` dentro da pasta `resultados/`.
-3. Com o arquivo `resultados/resultados_pipeline.csv` no lugar, execute a análise visual com o Python:
-   ```bash
-   python analise_experimento.py
-   ```
 Os gráficos unificados comparativos serão gravados em:
 *   `resultados/grafo_normal.png`
 *   `resultados/grafo_geometrico.png`
@@ -75,11 +74,50 @@ Os gráficos unificados comparativos serão gravados em:
 
 ## 🧪 Executando Testes Unitários
 
-Para validar partes individuais do projeto (como Union-Find, Binary Heap, Kruskal ou Prim), você pode compilar os arquivos presentes na pasta `tests/` e executá-los.
+Para validar componentes individuais do projeto de forma isolada, você pode compilar e rodar os testes da pasta `tests/` utilizando os comandos listados a seguir:
 
-Exemplo de compilação do teste do Union-Find:
-```powershell
-g++ -Wall -O3 tests/test_unionfind.cpp -o builds/test_union_find
-.\builds\test_union_find
-```
-Instruções completas para todos os testes unitários estão listadas no arquivo [`ExecTests.md`](ExecTests.md).
+### 1. Disjoint Set / Union-Find
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 heads/UnionFind.h tests/test_unionfind.cpp -o builds/test_union_find
+  .\builds\test_union_find
+  ```
+* **Referência**: [Introduction to Disjoint Set (Union-Find Data Structure)](https://www.geeksforgeeks.org/dsa/introduction-to-disjoint-set-data-structure-or-union-find-algorithm/)
+
+### 2. Binary Heap
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 tests/test_binaryheap.cpp -o builds/test_binary_heap
+  .\builds\test_binary_heap
+  ```
+* **Referência**: [C++ Program to Implement Binary Heap](https://www.geeksforgeeks.org/cpp/cpp-program-to-implement-binary-heap/)
+
+### 3. Algoritmo de Kruskal
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 tests/test_kruskal.cpp -o builds/test_kruskal
+  .\builds\test_kruskal
+  ```
+* **Referência**: [Kruskal's Minimum Spanning Tree (MST) Algorithm](https://www.geeksforgeeks.org/dsa/kruskals-minimum-spanning-tree-algorithm-greedy-algo-2/)
+
+### 4. Algoritmo de Prim
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 tests/test_prim.cpp -o builds/test_prim
+  .\builds\test_prim
+  ```
+* **Referência**: [Prim's Algorithm for Minimum Spanning Tree (MST)](https://www.geeksforgeeks.org/dsa/prims-minimum-spanning-tree-mst-greedy-algo-5/)
+
+### 5. Gerador de Grafos (Random Graph Generator)
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 tests/test_generator.cpp -o builds/test_generator
+  .\builds\test_generator
+  ```
+
+### 6. Cronometragem (Timer)
+* **Compilação e Execução**:
+  ```powershell
+  g++ -Wall -O3 tests/test_timer.cpp -o builds/test_timer
+  .\builds\test_timer
+  ```
